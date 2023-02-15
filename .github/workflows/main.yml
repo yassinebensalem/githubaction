@@ -32,7 +32,7 @@ jobs:
     - name: Build Docker image
       run: |
         docker build -t my-docker-image .
-        docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} -t docker.io
+        docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} docker.io
         docker tag my-docker-image docker.io/myusername/my-docker-image:latest
         docker push docker.io/myusername/my-docker-image:latest
       env:
