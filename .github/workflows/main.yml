@@ -37,5 +37,5 @@ jobs:
         docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:latest
         docker push docker.io/yassinedockeer/my-docker-image:latest
       env:
-        yassinedockeer: ${{ secrets.REGISTRY_USERNAME }}
-        azeqs.123: ${{ secrets.REGISTRY_PASSWORD }}
+        'yassinedockeer': ${{ secrets.REGISTRY_USERNAME }}
+        'azeqs.123': ${{ secrets.REGISTRY_PASSWORD }}
