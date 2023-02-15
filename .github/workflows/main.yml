@@ -32,6 +32,8 @@ jobs:
     - name: Build Docker image
       run: |
         docker build -t my-docker-image .
+        docker login -u yassinedockeer -p azeqs.123 docker.io
+
         docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} docker.io
 
         docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:latest
