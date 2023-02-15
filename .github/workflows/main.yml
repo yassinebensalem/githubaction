@@ -20,5 +20,21 @@ jobs:
         cache: 'npm'
     - run: npm install
     - run: npm install -g jest
-  
     - run: npm test
+
+  build-and-push-to-hub:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Build Docker image
+      run: |
+        docker build -t my-docker-image .
+        docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} docker.io
+        docker tag my-docker-image docker.io/myusername/my-docker-image:latest
+        docker push docker.io/myusername/my-docker-image:latest
+      env:
+        REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+        REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
