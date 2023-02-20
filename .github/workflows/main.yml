@@ -38,12 +38,12 @@ jobs:
 
         docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:latest
         docker push docker.io/yassinedockeer/my-docker-image:latest
-        docker run -p 3000:3000 docker.io/yassinedockeer/my-docker-image:latest
+        docker run -d -p 3000:3000 docker.io/yassinedockeer/my-docker-image:latest
+        container_id=$(docker ps -qf "ancestor=docker.io/yassinedockeer/my-docker-image:latest")
+        container_ip=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $container_id)
+        echo "Container IP: $container_ip"
+
         
-        CONTAINER_ID=$(docker ps -qf "ancestor=docker.io/yassinedockeer/my-docker-image")
-        echo "Container ID: $CONTAINER_ID"
-        CONTAINER_IP=$(docker container inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER_ID)
-        echo "Container IP: $CONTAINER_IP"
       env:
         'yassinedockeer': ${{ secrets.REGISTRY_USERNAME }}
         'azeqs.123': ${{ secrets.REGISTRY_PASSWORD }}
