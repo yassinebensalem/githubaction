@@ -1,0 +1,6 @@
+version: '3'
+services:
+  my-docker-image:
+    image: docker.io/yassinedockeer/my-docker-image:latest
+    ports:
+      - "3000:3000"
