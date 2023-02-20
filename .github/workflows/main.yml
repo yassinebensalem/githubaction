@@ -32,18 +32,13 @@ jobs:
     - name: Build Docker image
       run: |
         docker build -t my-docker-image .
-        docker login -u yassinedockeer -p azeqs.123 docker.io
+        
 
         docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} docker.io
 
         docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:latest
         docker push docker.io/yassinedockeer/my-docker-image:latest
-        docker run -d -p 3000:3000 docker.io/yassinedockeer/my-docker-image:latest
-        container_id=$(docker ps -qf "ancestor=docker.io/yassinedockeer/my-docker-image:latest")
-        container_ip=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $container_id)
-        echo "Container IP: $container_ip"
+        
 
         
-      env:
-        'yassinedockeer': ${{ secrets.REGISTRY_USERNAME }}
-        'azeqs.123': ${{ secrets.REGISTRY_PASSWORD }}
+      
