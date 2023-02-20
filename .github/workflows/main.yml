@@ -38,7 +38,12 @@ jobs:
 
         docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:latest
         docker push docker.io/yassinedockeer/my-docker-image:latest
-        
 
-        
-      
+  run-docker-compose:
+    needs: build-and-push-to-hub
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Run docker-compose
+      run: docker-compose up -d
