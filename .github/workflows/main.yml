@@ -41,6 +41,10 @@ jobs:
         docker run -p 3000:3000 docker.io/yassinedockeer/my-docker-image:latest
         docker ps
         docker container inspect [CONTAINER ID]|[CONTAINER NAME]
+        CONTAINER_ID=$(docker ps -qf "ancestor=docker.io/yassinedockeer/my-docker-image")
+        echo "Container ID: $CONTAINER_ID"
+        CONTAINER_IP=$(docker container inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER_ID)
+        echo "Container IP: $CONTAINER_IP"
       env:
         'yassinedockeer': ${{ secrets.REGISTRY_USERNAME }}
         'azeqs.123': ${{ secrets.REGISTRY_PASSWORD }}
