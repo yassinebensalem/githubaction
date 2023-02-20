@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
-    branches: [ "man" ]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -39,8 +39,7 @@ jobs:
         docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:latest
         docker push docker.io/yassinedockeer/my-docker-image:latest
         docker run -p 3000:3000 docker.io/yassinedockeer/my-docker-image:latest
-        docker ps
-        docker container inspect [CONTAINER ID]|[CONTAINER NAME]
+        
         CONTAINER_ID=$(docker ps -qf "ancestor=docker.io/yassinedockeer/my-docker-image")
         echo "Container ID: $CONTAINER_ID"
         CONTAINER_IP=$(docker container inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER_ID)
