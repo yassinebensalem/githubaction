@@ -39,6 +39,8 @@ jobs:
         docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:latest
         docker push docker.io/yassinedockeer/my-docker-image:latest
         docker run -p 3000:3000 docker.io/yassinedockeer/my-docker-image:latest
+        docker ps
+        docker container inspect [CONTAINER ID]|[CONTAINER NAME]
       env:
         'yassinedockeer': ${{ secrets.REGISTRY_USERNAME }}
         'azeqs.123': ${{ secrets.REGISTRY_PASSWORD }}
