@@ -30,7 +30,6 @@ jobs:
 
   build-and-push-to-hub:
     needs: build
-    
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -40,17 +39,14 @@ jobs:
         run: |
           docker build -t my-docker-image .
           docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} docker.io
-          docker tag my-docker-image docker.io/yassinedockeer/my-docker-image-prod:latest
-          docker push docker.io/yassinedockeer/my-docker-image:latest
+          docker push docker.io/yassinedockeer/my-docker-image:prod
 
-           
-          - name: Build Docker image for dev
-            if: github.ref == 'refs/heads/dev' 
-            run: |
-              docker build -t my-docker-image .
-              docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} docker.io
-              docker tag my-docker-image docker.io/yassinedockeer/my-docker-image-dev:latest
-              docker push docker.io/yassinedockeer/my-docker-image:latest
+      - name: Build Docker image for dev
+        if: github.ref == 'refs/heads/dev' 
+        run: |
+          docker build -t my-docker-image .
+          docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} docker.io
+          docker push docker.io/yassinedockeer/my-docker-image:dev
 
   run-docker-compose:
     needs: build-and-push-to-hub
