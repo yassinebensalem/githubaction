@@ -44,7 +44,9 @@ jobs:
 
           docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:releases
           docker push docker.io/yassinedockeer/my-docker-image:releases
-          docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:${{ github.ref_slug }}
+          docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:releases
+          docker push docker.io/yassinedockeer/my-docker-image:releases
+          
          
 
       - name: Build Docker image for dev
