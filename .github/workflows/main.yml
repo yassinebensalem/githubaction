@@ -42,8 +42,9 @@ jobs:
 
           docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} docker.io
 
-          docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:relese
-          docker push docker.io/yassinedockeer/my-docker-image:relese
+          docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:releases
+          docker push docker.io/yassinedockeer/my-docker-image:releases
+          docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:${{ github.ref_slug }}
          
 
       - name: Build Docker image for dev
@@ -51,7 +52,9 @@ jobs:
         run: |
           docker build -t my-docker-image .
           docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} docker.io
-          docker push docker.io/yassinedockeer/my-docker-image:latest
+           docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:dev
+          docker push docker.io/yassinedockeer/my-docker-image:dev
+          docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:${{ github.ref_slug }}
 
   run-docker-compose:
     needs: build-and-push-to-hub
