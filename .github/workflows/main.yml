@@ -1,57 +1,68 @@
 name: Node.js CI
+
 on:
   push:
     branches:
-    - master
-    - 'releases/**'
-    - dev
-    - main
+      - master
+      - 'releases/**'
+      - dev
+      - main
   pull_request:
     branches:
-    - master
-    - 'releases/**'
-    - dev
-    - main
-
+      - master
+      - 'releases/**'
+      - dev
+      - main
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: 14.x
-        cache: 'npm'
-    - run: npm install
-    - run: npm install -g jest
-    - run: npm test
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+          cache: 'npm'
+      - run: npm install
+      - run: npm install -g jest
+      - run: npm test
 
   build-and-push-to-hub:
     needs: build
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Build Docker image
-      run: |
-        docker build -t my-docker-image .
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build Docker image for releases
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/releases'
+        run: |
+          docker build -t my-docker-image .
         
 
-        docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} docker.io
+          docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} docker.io
 
-        docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:latest
-        docker push docker.io/yassinedockeer/my-docker-image:latest
+          docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:releases
+          docker push docker.io/yassinedockeer/my-docker-image:releases
+          docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:releases
+          docker push docker.io/yassinedockeer/my-docker-image:releases
+          
+         
+
+      - name: Build Docker image for dev
+        if: github.ref == 'refs/heads/dev' 
+        run: |
+          docker build -t my-docker-image .
+          docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} docker.io
+           docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:dev
+          docker push docker.io/yassinedockeer/my-docker-image:dev
+          docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:${{ github.ref_slug }}
 
   run-docker-compose:
     needs: build-and-push-to-hub
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Run docker-compose
-      run: docker-compose up -d
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run docker-compose
+        run: docker-compose up -d
