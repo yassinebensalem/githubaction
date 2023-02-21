@@ -42,8 +42,8 @@ jobs:
 
           docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} docker.io
 
-          docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:latest
-          docker push docker.io/yassinedockeer/my-docker-image:latest
+          docker tag my-docker-image docker.io/yassinedockeer/my-docker-image:relese
+          docker push docker.io/yassinedockeer/my-docker-image:relese
          
 
       - name: Build Docker image for dev
