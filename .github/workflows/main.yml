@@ -78,6 +78,8 @@ jobs:
            echo "Here's your new SSH public key:"
            cat ssh_key.pub
             echo "Copy the public key to the remote server's authorized_keys file"
+       - name: Debug private key
+         run: echo "${{ secrets.SSH_PRIVATE_KEY }}"
        - name: Set up SSH agent and deploy
          uses: appleboy/ssh-action@master
          with:
