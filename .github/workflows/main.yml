@@ -70,6 +70,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+    - name: Generate SSH key
+      run: ssh-keygen -t rsa -b 4096 -f ssh_key -N ""
+
+    - name: Store private key as secret
+      uses: azure/cli@v1
+      with:
+        inlineScript: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | az keyvault secret set --vault-name "my-key-vault" --name "ssh-private-key" --value "@-"
     - name: Generate SSH key pair
       run: |
         ssh-keygen -t rsa -b 4096 -C "y" -f my-ssh-key
