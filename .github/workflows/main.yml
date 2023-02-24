@@ -66,3 +66,22 @@ jobs:
         uses: actions/checkout@v2
       - name: Run docker-compose
         run: docker-compose up -d
+   
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Generate SSH key pair
+      run: |
+        ssh-keygen -t rsa -b 4096 -C "y" -f my-ssh-key
+        echo "Here's your new SSH private key:"
+        cat my-ssh-key
+        echo "Here's your new SSH public key:"
+        cat my-ssh-key.pub
+        echo "Save the private key as a GitHub secret named SSH_PRIVATE_KEY"
+    - name: Set up SSH agent
+      uses: webfactory/ssh-agent@v0.4.1
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    - name: Deploy to remote server
+      run: |
+        ssh ssh vagrant@172.10.0.140 -p 22  "echo 'Hello, world!'"
